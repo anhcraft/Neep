@@ -7,31 +7,31 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class Context {
-    private Parser parser;
+public class ReadContext {
+    private ReadHandler readHandler;
     private NeepContainer<?> container; // current container
     private String string;
     private NeepComponent lastInlinedEntry;
     private int cursor;
-    private Consumer<Context> childCallback;
+    private Consumer<ReadContext> childCallback;
 
-    public Context(@NotNull String string, @NotNull NeepContainer<?> container) {
+    public ReadContext(@NotNull String string, @NotNull NeepContainer<?> container) {
         this.string = string;
         this.container = container;
-        parser = new Parser(this);
+        readHandler = new ReadHandler(this);
     }
 
-    public Context(@NotNull Context parent, @NotNull NeepContainer<?> container, @NotNull Consumer<Context> childCallback) {
+    public ReadContext(@NotNull ReadContext parent, @NotNull NeepContainer<?> container, @NotNull Consumer<ReadContext> childCallback) {
         this.string = parent.string;
         this.container = container;
         this.cursor = parent.cursor;
         this.childCallback = childCallback;
-        parser = new Parser(this);
+        readHandler = new ReadHandler(this);
     }
 
     @NotNull
-    public Parser getParser() {
-        return parser;
+    public ReadHandler getReadHandler() {
+        return readHandler;
     }
 
     @NotNull
@@ -66,7 +66,7 @@ public class Context {
     }
 
     @Nullable
-    public Consumer<Context> getChildCallback() {
+    public Consumer<ReadContext> getChildCallback() {
         return childCallback;
     }
 
@@ -108,10 +108,10 @@ public class Context {
         if(cursor >= string.length()) return;
         while (cursor < string.length()) {
             char c = string.charAt(cursor++);
-            if (!parser.next(c)) {
+            if (!readHandler.next(c)) {
                 return;
             }
         }
-        parser.eos();
+        readHandler.eos();
     }
 }

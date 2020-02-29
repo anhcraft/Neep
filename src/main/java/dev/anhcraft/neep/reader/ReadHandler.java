@@ -8,10 +8,10 @@ import dev.anhcraft.neep.utils.MathUtil;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-public class Parser {
+public class ReadHandler {
     private static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
 
-    private Context context;
+    private ReadContext readContext;
     private String key;
     // 0: key
     // 1: mid (key -> value)
@@ -35,11 +35,11 @@ public class Parser {
     public byte getDefaultMode(){
         // entries in list ignores the key so the default mode
         // will be 1 instead of 0 like normal
-        return (byte) (context.getContainer() instanceof NeepList ? 1 : 0);
+        return (byte) (readContext.getContainer() instanceof NeepList ? 1 : 0);
     }
 
-    public Parser(Context context) {
-        this.context = context;
+    public ReadHandler(ReadContext readContext) {
+        this.readContext = readContext;
         mode = getDefaultMode();
     }
 
@@ -52,7 +52,7 @@ public class Parser {
         NeepDynamic<?> entry;
         if(mode == 3) {
             entry = new NeepExpression(
-                    context.getContainer(),
+                    readContext.getContainer(),
                     key,
                     value.trim(),
                     null
@@ -60,7 +60,7 @@ public class Parser {
         } else if(MathUtil.isNumber(value)) {
             if (value.indexOf('.') >= 0) {
                 entry = new NeepDouble(
-                        context.getContainer(),
+                        readContext.getContainer(),
                         key,
                         value,
                         null
@@ -70,12 +70,12 @@ public class Parser {
                 // as currently there is no correct way to check if a string is an integer or long
                 boolean i = (value.charAt(0) == '-') ? value.length() <= 10 : value.length() <= 9;
                 entry = i ? new NeepInt(
-                        context.getContainer(),
+                        readContext.getContainer(),
                         key,
                         value,
                         null
                 ) : new NeepLong(
-                        context.getContainer(),
+                        readContext.getContainer(),
                         key,
                         value,
                         null
@@ -84,21 +84,21 @@ public class Parser {
         } else {
             if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
                 entry = new NeepBoolean(
-                        context.getContainer(),
+                        readContext.getContainer(),
                         key,
                         value,
                         null
                 );
             } else {
                 entry = new NeepString(
-                        context.getContainer(),
+                        readContext.getContainer(),
                         key,
                         value,
                         null
                 );
             }
         }
-        context.submit(entry);
+        readContext.submit(entry);
         stringBuilder = new StringBuilder();
         valueBound = false;
     }
@@ -115,24 +115,24 @@ public class Parser {
                 end();
             }
             // collect all characters until meet the line break (or EOS)
-            context.collectUtil(Mark.LINE_BREAK, sb -> {
+            readContext.collectUtil(Mark.LINE_BREAK, sb -> {
                 NeepComment comment = new NeepComment(
-                        context.getContainer(),
+                        readContext.getContainer(),
                         sb.toString(),
-                        context.getLastInlinedEntry() != null
+                        readContext.getLastInlinedEntry() != null
                 );
-                if(context.getLastInlinedEntry() != null) {
-                    if (context.getLastInlinedEntry().isElement()) {
-                        context.getLastInlinedEntry().asElement().setInlineComment(comment);
+                if(readContext.getLastInlinedEntry() != null) {
+                    if (readContext.getLastInlinedEntry().isElement()) {
+                        readContext.getLastInlinedEntry().asElement().setInlineComment(comment);
                     } else {
                         try {
-                            context.report("Comment not allowed to be put here");
+                            readContext.report("Comment not allowed to be put here");
                         } catch (NeepReaderException e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                context.submit(comment);
+                readContext.submit(comment);
                 mode = getDefaultMode();
             });
             return true;
@@ -150,15 +150,15 @@ public class Parser {
             if(!valueBound) {
                 // make sure the current context is belong to a children container
                 // for e.g, if the root has child callback -> something wrong
-                if (context.getChildCallback() != null) {
+                if (readContext.getChildCallback() != null) {
                     // only push the last entry if the container is section
                     // the list is a special case (as their keys are auto-generated)
                     if (mode == 0) {
                         end();
                     }
-                    context.getChildCallback().accept(context);
+                    readContext.getChildCallback().accept(readContext);
                 } else {
-                    context.report("Something wrong happened");
+                    readContext.report("Something wrong happened");
                 }
                 return false;
             }
@@ -196,11 +196,11 @@ public class Parser {
                     // see the opening mark to init a list/section
                     // this is a temp fix for this:
                     if(om) {
-                        context.moveCursor(-1);
+                        readContext.moveCursor(-1);
                     }
                 }
             } else if(om){
-                context.report("At least one space needed between key and opening mark");
+                readContext.report("At least one space needed between key and opening mark");
             } else if(KEY_VALIDATOR.test(c)) {
                 // having line breaks before key is allowed, but if
                 // the key is being read and there WAS a line break,
@@ -209,22 +209,22 @@ public class Parser {
                 // e.g opening marks - which are allowed to put
                 // after a line break
                 if(keySeparated && stringBuilder.length() > 0) {
-                    context.report("Multiple-lined key is not allowed: "+stringBuilder.toString());
+                    readContext.report("Multiple-lined key is not allowed: "+stringBuilder.toString());
                     return false;
                 }
                 stringBuilder.append(c);
             } else {
-                context.report("Invalid character: " + c +" (only [A-Za-z0-9-_] are allowed)");
+                readContext.report("Invalid character: " + c +" (only [A-Za-z0-9-_] are allowed)");
             }
         } else if(mode == 1) {
             // if the default mode is 1, it means the key has
             // been skipped, we have to manually generate it here
             if(getDefaultMode() == 1) {
-                if(context.getContainer() instanceof NeepList){
+                if(readContext.getContainer() instanceof NeepList){
                     // only count the elements (skip comments)
-                    key = Long.toString(context.getContainer().stream().filter(o -> o instanceof NeepElement).count());
+                    key = Long.toString(readContext.getContainer().stream().filter(o -> o instanceof NeepElement).count());
                 } else {
-                    context.report("Something wrong happened");
+                    readContext.report("Something wrong happened");
                     return false;
                 }
             }
@@ -241,7 +241,7 @@ public class Parser {
             } else if(Mark.isOpenSectionIdf(c)) {
                 mode = 5;
             } else if(Mark.isCloseSectionIdf(c) || Mark.isCloseListIdf(c)) {
-                context.report("Container closed unexpectedly! ");
+                readContext.report("Container closed unexpectedly! ");
             }
             // between the key and the value can contain spaces or line breaks
             // if we meet other character, it means the value is present now
@@ -263,7 +263,7 @@ public class Parser {
                 } else {
                     if(!valueBound) {
                         // e.g: key value" (after the value is a closing mark)
-                        context.report("Closing mark found while opening mark not");
+                        readContext.report("Closing mark found while opening mark not");
                     }
                     // make sure the opening mark and closing mark are same type
                     // e.g: ` must go with `, not "
@@ -271,7 +271,7 @@ public class Parser {
                         finishEntry();
                         mode = 6;
                     } else {
-                        context.report("Unmatched closing mark");
+                        readContext.report("Unmatched closing mark");
                     }
                     return true;
                 }
@@ -281,7 +281,7 @@ public class Parser {
             else if(c == Mark.LINE_BREAK && !valueBound) {
                 finishEntry();
                 mode = getDefaultMode();
-                context.setLastInlinedEntry(null);
+                readContext.setLastInlinedEntry(null);
                 return true;
             }
             else if(c == '\\') {
@@ -292,20 +292,20 @@ public class Parser {
         } else if(mode == 4) {
             mode = 6;
             NeepList<?> component = new NeepList<>(
-                    context.getContainer(),
+                    readContext.getContainer(),
                     key,
                     null,
                     new ArrayList<>()
             );
-            new Context(
-                    context,
+            new ReadContext(
+                    readContext,
                     component,
                     last -> {
-                        context.setCursor(last.getCursor());
-                        context.submit(component);
+                        readContext.setCursor(last.getCursor());
+                        readContext.submit(component);
                         stringBuilder = new StringBuilder();
                         try {
-                            context.handle();
+                            readContext.handle();
                         } catch (NeepReaderException e) {
                             e.printStackTrace();
                         }
@@ -315,20 +315,20 @@ public class Parser {
         } else if(mode == 5) {
             mode = 6;
             NeepSection component = new NeepSection(
-                    context.getContainer(),
+                    readContext.getContainer(),
                     key,
                     null,
                     new ArrayList<>()
             );
-            new Context(
-                    context,
+            new ReadContext(
+                    readContext,
                     component,
                     last -> {
-                        context.setCursor(last.getCursor());
-                        context.submit(component);
+                        readContext.setCursor(last.getCursor());
+                        readContext.submit(component);
                         stringBuilder = new StringBuilder();
                         try {
-                            context.handle();
+                            readContext.handle();
                         } catch (NeepReaderException e) {
                             e.printStackTrace();
                         }
@@ -342,11 +342,11 @@ public class Parser {
             if(c == ' ' || c == '\n') {
                 if(c == '\n') {
                     // new line -> no inlined entry
-                    context.setLastInlinedEntry(null);
+                    readContext.setLastInlinedEntry(null);
                 }
                 mode = getDefaultMode();
             } else {
-                context.report("Invalid character " + c);
+                readContext.report("Invalid character " + c);
             }
         }
         return true;
@@ -360,20 +360,20 @@ public class Parser {
         if(mode == 2 || mode == 3 || getDefaultMode() == 1){
             finishEntry();
         } else if((mode != 0 || stringBuilder.length() > 0)) {
-            context.report("Entry ended unexpectedly!");
+            readContext.report("Entry ended unexpectedly!");
         }
     }
 
     public void eos() throws NeepReaderException {
-        if(context.getChildCallback() != null){
-            context.report("Container ended unexpectedly!");
+        if(readContext.getChildCallback() != null){
+            readContext.report("Container ended unexpectedly!");
         } else if(mode != 0 && mode != 1 && mode != 6) {
             // spacial case: <begin>key value<end>
             if(!valueBound && (mode == 2 || mode == 3)) {
                 finishEntry();
                 return;
             }
-            context.report("Entry ended unexpectedly!");
+            readContext.report("Entry ended unexpectedly!");
         }
     }
 }

@@ -17,11 +17,11 @@ public class NeepReader {
     @NotNull
     public static NeepSection parse(@NotNull String string) throws NeepReaderException {
         NeepSection section = new NeepSection(null, "", null, new ArrayList<>());
-        Context context = new Context(
+        ReadContext readContext = new ReadContext(
                 string,
                 section
         );
-        context.handle();
+        readContext.handle();
         return section;
     }
 
