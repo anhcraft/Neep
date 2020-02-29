@@ -1,5 +1,6 @@
 key value
 another_key "value" # with comment
+# another comment
 
 int 1
 double 1.0
