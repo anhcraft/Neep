@@ -68,7 +68,7 @@ public class ReadHandler {
             } else {
                 // even the value with 10 or 11 length can be an integer.... we should treat it as long
                 // as currently there is no correct way to check if a string is an integer or long
-                boolean i = (value.charAt(0) == '-') ? value.length() <= 10 : value.length() <= 9;
+                boolean i = (value.charAt(0) == '-' || value.charAt(0) == '+') ? value.length() <= 10 : value.length() <= 9;
                 entry = i ? new NeepInt(
                         readContext.getContainer(),
                         key,
