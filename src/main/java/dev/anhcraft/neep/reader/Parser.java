@@ -105,13 +105,20 @@ public class Parser {
 
     public boolean next(char c) throws NeepReaderException {
         if(Mark.isCommentIdf(c)) {
-            // push the last entry
-            end();
+            // not sure why if there is an element with
+            // inlined comment in a list, the next element
+            // will duplicate the old one, thus generating
+            // a total of 3 elements
+            // ...
+            if(getDefaultMode() == 0) {
+                // push the last entry
+                end();
+            }
             // collect all characters until meet the line break (or EOS)
-            context.collectUtil(Mark.LINE_BREAK, stringBuilder -> {
+            context.collectUtil(Mark.LINE_BREAK, sb -> {
                 NeepComment comment = new NeepComment(
                         context.getContainer(),
-                        stringBuilder.toString(),
+                        sb.toString(),
                         context.getLastInlinedEntry() != null
                 );
                 if(context.getLastInlinedEntry() != null) {
@@ -350,7 +357,7 @@ public class Parser {
         // comment must have at least one space after the last entry
         // like: key "value" # comment
         // adding mode != 6 will break this rule
-        if(mode == 2 || mode == 3 || (getDefaultMode() == 1)){
+        if(mode == 2 || mode == 3 || getDefaultMode() == 1){
             finishEntry();
         } else if((mode != 0 || stringBuilder.length() > 0)) {
             context.report("Entry ended unexpectedly!");
