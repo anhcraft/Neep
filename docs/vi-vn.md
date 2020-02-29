@@ -73,9 +73,13 @@ Có hai kiểu ghi chú trong Neep đó là:
 - Ghi chú cùng dòng: đằng sau mỗi cặp khoá-giá trị sẽ là một ghi chú
 - Ghi chú toàn dòng: dành riêng một dòng ra để ghi chú!
 <br>
-Dù thuộc kiểu nào thì đều có chung một quy tắc đó là **thêm dấu thăng (#) vào trước nội dung cần ghi chú**.<br>
+Dù thuộc kiểu nào thì đều có chung một quy tắc đó là: **thêm dấu thăng (#) vào trước nội dung cần ghi chú**.
+<br>
+
 **Quy ước:**
+
 - Mọi kí tự kể từ sau dấu thăng đến cuối dòng đều nằm trong một ghi chú
+
 - Ghi chú không thể gộp. Ví dụ ```# ghi chu 1 # ghi chu 2``` là một ghi chú, có nội dung là ```ghi chu 1 # ghi chu 2```
 
 ### Kiểu nguyên thuỷ
@@ -89,6 +93,7 @@ Kiểu nguyên thuỷ bao gồm nhiều kiểu con như chuỗi, số nguyên, s
     + Còn dài hơn nữa sẽ là kiểu **Long**
 - Còn lại đều thuộc kiểu **String**
 <br>
+
 **Ví dụ:**
 ```
 ho_va_ten   "Nguyen Van A"
@@ -97,6 +102,7 @@ cong_viec   freelancer
 doc_than    true
 vi_tien     16500000.700
 ```
+
 **Chú ý đối với giá trị**
 - Giá trị nên được đặt trong cặp dấu ngoặc kép ("), bởi lúc này phần giá trị sẽ được tính từ dấu ngoặc kép đầu tiên cho tới dấu ngoặc kép tiếp theo, tức là nội dung được phép nằm trên **nhiều dòng**.
 ```
@@ -105,6 +111,7 @@ gioi_thieu "
               Toi la mot freelancer, chuyen ve mang thiet ke
             "
 ```
+
 - Giả sử nội dung có dấu ngoặc kép thì sao? Lúc này bạn phải thêm dấu gạch chéo ngược (\\) ở phía trước để triệt tiêu tác dụng của dấu ngoặc kép, Neep sẽ hiểu rằng nội dung nên được tiếp tục thay vì dừng ở đây.
 ```
 story "
@@ -113,6 +120,7 @@ story "
         Cho toi nay van chua ai hieu duoc.
       " # mot cau chuyen vui
 ```
+
 - Bạn cảm thấy dấu ngoặc kép này có vẻ phiền toái? Nếu nội dung của bạn **không cần nằm trên nhiều dòng** thì bạn không bắt buộc phải thêm dấu đó ^^. Chẳng hạn:
 ```
 username admin # tai khoan
