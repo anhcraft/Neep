@@ -1,6 +1,7 @@
 import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.reader.NeepReader;
 import dev.anhcraft.neep.struct.NeepContainer;
+import dev.anhcraft.neep.struct.NeepElement;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -8,11 +9,21 @@ import java.util.function.Consumer;
 
 public class ReaderTest {
     private void print(String prefix, Object obj){
-        if(obj instanceof NeepContainer<?>) {
-            System.out.println(prefix+obj.getClass().getSimpleName()+" ("+((NeepContainer<?>) obj).size()+")");
+        if(obj instanceof NeepContainer<?> && obj instanceof NeepElement) {
+            String k = ((NeepElement) obj).getKey();
+            System.out.println(prefix+obj.getClass().getSimpleName()+": "+k+" ("+((NeepContainer<?>) obj).size()+")");
             ((NeepContainer<?>) obj).forEach((Consumer<Object>) o -> print(prefix + "  ", o));
         } else {
             System.out.println(prefix+obj.getClass().getSimpleName()+": " + obj.toString());
+        }
+    }
+
+    @Test
+    public void test0(){
+        try {
+            print("", NeepReader.parse(getClass().getResourceAsStream("/general.neep")));
+        } catch (IOException | NeepReaderException e) {
+            e.printStackTrace();
         }
     }
 
