@@ -4,10 +4,7 @@ import dev.anhcraft.neep.Mark;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NeepSection extends NeepElement implements NeepContainer<NeepComponent> {
     private Map<String, Integer> key2Index = new HashMap<>();
@@ -75,6 +72,31 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     public NeepComponent remove(String key){
         int i = indexOf(key);
         return i == -1 ? null : remove(i);
+    }
+
+    @NotNull
+    public Set<String> getKeys() {
+        return getKeys(false);
+    }
+
+    private void getKeys(String prefix, Set<String> keys, boolean deep) {
+        for(NeepComponent component : this){
+            if(component instanceof NeepElement) {
+                NeepElement element = (NeepElement) component;
+                keys.add(prefix + element.getKey());
+            }
+            if(deep && component instanceof NeepSection) {
+                NeepSection section = (NeepSection) component;
+                section.getKeys(prefix + section.getKey() + ".", keys, true);
+            }
+        }
+    }
+
+    @NotNull
+    public Set<String> getKeys(boolean deep) {
+        Set<String> keys = new LinkedHashSet<>();
+        getKeys(getKey().isEmpty() ? "" : getKey() + ".", keys, deep);
+        return keys;
     }
 
     @Override
