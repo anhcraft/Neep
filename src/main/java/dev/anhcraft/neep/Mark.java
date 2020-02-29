@@ -1,4 +1,4 @@
-package dev.anhcraft.neep.utils;
+package dev.anhcraft.neep;
 
 public class Mark {
     public static final char PATH_SEPARATOR = '.';
