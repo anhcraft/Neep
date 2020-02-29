@@ -2,7 +2,7 @@ package dev.anhcraft.neep.writer;
 
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.struct.*;
-import dev.anhcraft.neep.utils.Mark;
+import dev.anhcraft.neep.Mark;
 
 public class WriteHandler {
     private static final String SPACE = "  ";

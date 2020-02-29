@@ -2,7 +2,7 @@ package dev.anhcraft.neep.reader;
 
 import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.struct.*;
-import dev.anhcraft.neep.utils.Mark;
+import dev.anhcraft.neep.Mark;
 import dev.anhcraft.neep.utils.MathUtil;
 
 import java.util.ArrayList;

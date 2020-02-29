@@ -3,7 +3,7 @@ package dev.anhcraft.neep.writer;
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.struct.NeepComponent;
 import dev.anhcraft.neep.struct.NeepContainer;
-import dev.anhcraft.neep.utils.Mark;
+import dev.anhcraft.neep.Mark;
 import org.jetbrains.annotations.NotNull;
 
 public class WriteContext {

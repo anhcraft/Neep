@@ -1,6 +1,6 @@
 package dev.anhcraft.neep.struct;
 
-import dev.anhcraft.neep.utils.Mark;
+import dev.anhcraft.neep.Mark;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
