@@ -45,10 +45,15 @@ public class ReadHandler {
 
     private void finishEntry() {
         String value = stringBuilder.toString();
+        stringBuilder = new StringBuilder();
         if(!valueBound) {
             // only trim if the string was not in "" or ``
             value = value.trim();
+            if(value.isEmpty() && getDefaultMode() == 1) {
+                return;
+            }
         }
+        valueBound = false;
         NeepDynamic<?> entry;
         if(mode == 3) {
             entry = new NeepExpression(
@@ -99,21 +104,11 @@ public class ReadHandler {
             }
         }
         readContext.submit(entry);
-        stringBuilder = new StringBuilder();
-        valueBound = false;
     }
 
     public boolean next(char c) throws NeepReaderException {
         if(Mark.isCommentIdf(c)) {
-            // not sure why if there is an element with
-            // inlined comment in a list, the next element
-            // will duplicate the old one, thus generating
-            // a total of 3 elements
-            // ...
-            if(getDefaultMode() == 0) {
-                // push the last entry
-                end();
-            }
+            end();
             // collect all characters until meet the line break (or EOS)
             readContext.collectUtil(Mark.LINE_BREAK, sb -> {
                 NeepComment comment = new NeepComment(
