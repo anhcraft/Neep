@@ -43,20 +43,26 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     }
 
     @Nullable
-    public NeepComponent set(int index, @NotNull NeepComponent component){
+    public NeepComponent set(int index, @NotNull NeepComponent component) {
+        if(component.isElement()) {
+            key2Index.put(component.asElement().getKey(), index);
+        }
         return components.set(index, component);
     }
 
     public void append(int index, @NotNull NeepComponent component){
+        if(component.isElement()) {
+            key2Index.put(component.asElement().getKey(), index);
+        }
         components.add(index, component);
     }
 
     public void appendFirst(@NotNull NeepComponent component){
-        components.add(0, component);
+        append(0, component);
     }
 
     public void appendLast(@NotNull NeepComponent component){
-        components.add(component);
+        append(size(), component);
     }
 
     @Nullable
