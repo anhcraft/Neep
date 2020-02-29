@@ -273,7 +273,7 @@ public class Parser {
             // is where the value will not be read anymore
             else if(c == Mark.LINE_BREAK && !valueBound) {
                 finishEntry();
-                mode = 0; // this should be 0 instead of 6 like normal
+                mode = getDefaultMode();
                 context.setLastInlinedEntry(null);
                 return true;
             }
