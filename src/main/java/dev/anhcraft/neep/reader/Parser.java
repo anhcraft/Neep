@@ -28,7 +28,7 @@ public class Parser {
     // if the key is reading and there is a line break
     // this one will be true. it makes sure that:
     // along with space, line break is also a thing to
-    // separate key with opening mask or value
+    // separate key with opening mark or value
     private boolean keySeparated;
     private StringBuilder stringBuilder = new StringBuilder();
 
@@ -138,7 +138,7 @@ public class Parser {
         // is between key and value (list)
         // or before the next key (section)
         if((Mark.isCloseListIdf(c) && (mode == 1 || mode == 2)) || (Mark.isCloseSectionIdf(c) && (mode == 0 || mode == 2))) {
-            // this rule only available for value without masks
+            // this rule only available for value without marks
             // if, e.g the value is inside "", we can't apply this rule
             if(!valueBound) {
                 // make sure the current context is belong to a children container
@@ -169,8 +169,8 @@ public class Parser {
                 return true;
             }
             // if there is a space -> the next will be value
-            // if there is an opening mask and had a line break
-            // means the mask was in another line -> list/section
+            // if there is an opening mark and had a line break
+            // means the mark was in another line -> list/section
             else if(c == ' ' || (keySeparated && om)) {
                 // if we have any space, it means the whole key has been read
                 // but make sure there was other character in the key
@@ -182,24 +182,24 @@ public class Parser {
                     // special case:
                     // key
                     // {
-                    // when the opening mask is in another
+                    // when the opening mark is in another
                     // line compared to the key, the cursor
-                    // in mode 1 is after the opening mask
+                    // in mode 1 is after the opening mark
                     // thus, can cause an error, since it can't
-                    // see the opening mask to init a list/section
+                    // see the opening mark to init a list/section
                     // this is a temp fix for this:
                     if(om) {
                         context.moveCursor(-1);
                     }
                 }
             } else if(om){
-                context.report("At least one space needed between key and opening mask");
+                context.report("At least one space needed between key and opening mark");
             } else if(KEY_VALIDATOR.test(c)) {
                 // having line breaks before key is allowed, but if
                 // the key is being read and there WAS a line break,
                 // this violates the rule; we should put the check
                 // here since other exceptions have been checked,
-                // e.g opening masks - which are allowed to put
+                // e.g opening marks - which are allowed to put
                 // after a line break
                 if(keySeparated && stringBuilder.length() > 0) {
                     context.report("Multiple-lined key is not allowed: "+stringBuilder.toString());
