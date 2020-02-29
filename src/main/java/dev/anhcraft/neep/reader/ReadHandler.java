@@ -339,8 +339,8 @@ public class ReadHandler {
             // between entries must have at least one space
             // or line break, e,g:
             // key_1 "value" key_2 "value"
-            if(c == ' ' || c == '\n') {
-                if(c == '\n') {
+            if(c == ' ' || c == Mark.LINE_BREAK) {
+                if(c == Mark.LINE_BREAK) {
                     // new line -> no inlined entry
                     readContext.setLastInlinedEntry(null);
                 }
