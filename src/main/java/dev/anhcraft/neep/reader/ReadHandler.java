@@ -124,6 +124,7 @@ public class ReadHandler {
                 if(readContext.getLastInlinedEntry() != null) {
                     if (readContext.getLastInlinedEntry().isElement()) {
                         readContext.getLastInlinedEntry().asElement().setInlineComment(comment);
+                        readContext.setLastInlinedEntry(null);
                     } else {
                         try {
                             readContext.report("Comment not allowed to be put here");
