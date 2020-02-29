@@ -1,0 +1,36 @@
+import dev.anhcraft.neep.errors.NeepReaderException;
+import dev.anhcraft.neep.reader.NeepReader;
+import dev.anhcraft.neep.struct.NeepContainer;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.function.Consumer;
+
+public class ReaderTest {
+    private void print(String prefix, Object obj){
+        if(obj instanceof NeepContainer<?>) {
+            System.out.println(prefix+obj.getClass().getSimpleName()+" ("+((NeepContainer<?>) obj).size()+")");
+            ((NeepContainer<?>) obj).forEach((Consumer<Object>) o -> print(prefix + "  ", o));
+        } else {
+            System.out.println(prefix+obj.getClass().getSimpleName()+": " + obj.toString());
+        }
+    }
+
+    @Test
+    public void test1(){
+        try {
+            print("", NeepReader.parse(getClass().getResourceAsStream("/pet.neep")));
+        } catch (IOException | NeepReaderException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test2(){
+        try {
+            print("", NeepReader.parse(getClass().getResourceAsStream("/webserver.neep")));
+        } catch (IOException | NeepReaderException e) {
+            e.printStackTrace();
+        }
+    }
+}

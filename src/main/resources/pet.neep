@@ -1,0 +1,29 @@
+
+# --------------------
+# Details about my pet
+# --------------------
+
+name Kevin                                         # Pet's name
+type dog                                           # Pet's type
+
+
+properties {
+    age     ` 1.5 * 365 * 24 * 60 * 60 `           # in seconds
+    height  .5                                     # in metres
+    weight  15                                     # in kilograms
+    skin_colors [
+        brown
+        black
+    ]
+}
+
+recent_activities [
+    {
+        time 10:25
+        type walk
+    }
+    {
+        time 10:45
+        type eat
+    }
+]
