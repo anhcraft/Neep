@@ -14,6 +14,7 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     private void checkIndexes() {
         if(needUpdateIndexes) {
             needUpdateIndexes = false;
+            key2Index.clear();
             for (int i = 0; i < components.size(); i++) {
                 NeepComponent c = components.get(i);
                 if (c.isElement()) {
@@ -80,8 +81,8 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
         NeepComponent nc = components.remove(index);
         if(nc.isElement()){
             key2Index.remove(nc.asElement().getKey());
-            needUpdateIndexes = true;
         }
+        needUpdateIndexes = true;
         return nc;
     }
 
@@ -130,8 +131,8 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
         components.remove(object);
         if(object instanceof NeepElement) {
             key2Index.remove(object.asElement().getKey());
-            needUpdateIndexes = true;
         }
+        needUpdateIndexes = true;
     }
 
     @Override
