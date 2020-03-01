@@ -68,7 +68,7 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     @Nullable
     public NeepComponent remove(int index){
         NeepComponent nc = components.remove(index);
-        if(nc != null){
+        if(nc.isElement()){
             key2Index.remove(nc.asElement().getKey());
         }
         return nc;
@@ -87,12 +87,11 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
 
     private void getKeys(String prefix, Set<String> keys, boolean deep) {
         for(NeepComponent component : this){
-            if(component instanceof NeepElement) {
-                NeepElement element = (NeepElement) component;
-                keys.add(prefix + element.getKey());
+            if(component.isElement()) {
+                keys.add(prefix + component.asElement().getKey());
             }
-            if(deep && component instanceof NeepSection) {
-                NeepSection section = (NeepSection) component;
+            if(deep && component.isSection()) {
+                NeepSection section = component.asSection();
                 section.getKeys(prefix + section.getKey() + ".", keys, true);
             }
         }
@@ -113,6 +112,37 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     @Override
     public int size() {
         return components.size();
+    }
+
+    @Override
+    public void remove(@NotNull NeepComponent object) {
+        components.remove(object);
+        if(object instanceof NeepElement) {
+            key2Index.remove(object.asElement().getKey());
+        }
+    }
+
+    @Override
+    public void add(@NotNull NeepComponent object) {
+        appendLast(object);
+    }
+
+    @Override
+    public void addAll(@NotNull Collection<NeepComponent> objects) {
+        for (NeepComponent component : objects) {
+            appendLast(component);
+        }
+    }
+
+    @Override
+    public Collection<NeepComponent> getAll() {
+        return new ArrayList<>(components);
+    }
+
+    @Override
+    public void clear() {
+        components.clear();
+        key2Index.clear();
     }
 
     @NotNull

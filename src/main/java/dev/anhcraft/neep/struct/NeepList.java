@@ -4,6 +4,8 @@ import dev.anhcraft.neep.Mark;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,6 +52,31 @@ public class NeepList<T> extends NeepElement implements NeepContainer<T> {
     @Override
     public int size() {
         return backend.size();
+    }
+
+    @Override
+    public void remove(@NotNull T object) {
+        backend.remove(object);
+    }
+
+    @Override
+    public void add(@NotNull T object) {
+        backend.add(object);
+    }
+
+    @Override
+    public void addAll(@NotNull Collection<T> objects) {
+        backend.addAll(objects);
+    }
+
+    @Override
+    public Collection<T> getAll() {
+        return new ArrayList<>(backend);
+    }
+
+    @Override
+    public void clear() {
+        backend.clear();
     }
 
     @NotNull
