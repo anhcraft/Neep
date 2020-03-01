@@ -21,7 +21,9 @@ public class NeepElement extends NeepComponent {
 
     @NotNull
     public String getPath() {
-        return getParent() == null ? key : ((NeepElement) getParent()).getPath() + Mark.PATH_SEPARATOR + key;
+        if(getParent() == null) return key;
+        String path = ((NeepElement) getParent()).getPath();
+        return path.isEmpty() ? key : path + Mark.PATH_SEPARATOR + key;
     }
 
     @Nullable
