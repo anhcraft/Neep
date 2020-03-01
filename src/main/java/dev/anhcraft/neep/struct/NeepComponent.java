@@ -3,9 +3,8 @@ package dev.anhcraft.neep.struct;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class NeepComponent {
     @NotNull
@@ -113,5 +112,38 @@ public class NeepComponent {
     @NotNull
     public NeepSection asSection(){
         return (NeepSection) this;
+    }
+
+    @Nullable
+    public Object getValueAsObject(){
+        if(this instanceof NeepInt){
+            return ((NeepInt) this).getValueAsInt();
+        } else if(this instanceof NeepLong){
+            return ((NeepLong) this).getValueAsLong();
+        } else if(this instanceof NeepDouble){
+            return ((NeepDouble) this).getValueAsDouble();
+        } else if(this instanceof NeepBoolean){
+            return ((NeepBoolean) this).getValue();
+        } else if(isDynamic()) {
+            return this.asDynamic().stringifyValue();
+        } else if(isSection()) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            for(NeepComponent c : asSection()){
+                if(c instanceof NeepElement) {
+                    map.put(c.asElement().getKey(), c.getValueAsObject());
+                }
+            }
+            return map;
+        } else if(isList()) {
+            return asList().stream()
+                    .filter(o -> o instanceof NeepComponent)
+                    .map(o -> (NeepComponent) o)
+                    .map(NeepComponent::getValueAsObject)
+                    .collect(Collectors.toList());
+        } else if(isComment()) {
+            return asComment().getContent();
+        } else {
+            throw new IllegalStateException("Cannot get value as object");
+        }
     }
 }
