@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class ReadHandler {
-    private static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
+    public static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
 
     private ReadContext readContext;
     private String key;

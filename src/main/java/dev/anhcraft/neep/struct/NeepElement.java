@@ -1,6 +1,7 @@
 package dev.anhcraft.neep.struct;
 
 import dev.anhcraft.neep.Mark;
+import dev.anhcraft.neep.reader.ReadHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,11 @@ public class NeepElement extends NeepComponent {
 
     public NeepElement(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment) {
         super(parent);
+        for (char c : key.toCharArray()) {
+            if (!ReadHandler.KEY_VALIDATOR.test(c)) {
+                throw new IllegalArgumentException("Key contains invalid character(s)");
+            }
+        }
         this.key = key;
         this.inlineComment = inlineComment;
     }
