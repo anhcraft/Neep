@@ -9,20 +9,29 @@ import java.util.*;
 public class NeepSection extends NeepElement implements NeepContainer<NeepComponent> {
     private Map<String, Integer> key2Index = new HashMap<>();
     private List<NeepComponent> components;
+    private boolean needUpdateIndexes = true;
+
+    private void checkIndexes() {
+        if(needUpdateIndexes) {
+            needUpdateIndexes = false;
+            for (int i = 0; i < components.size(); i++) {
+                NeepComponent c = components.get(i);
+                if (c.isElement()) {
+                    key2Index.put(c.asElement().getKey(), i);
+                }
+            }
+        }
+    }
 
     public NeepSection(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment,
                        @NotNull List<NeepComponent> components) {
         super(parent, key, inlineComment);
         this.components = components;
-        for(int i = 0; i < components.size(); i++){
-            NeepComponent c = components.get(i);
-            if(c.isElement()){
-                key2Index.put(c.asElement().getKey(), i);
-            }
-        }
+        checkIndexes();
     }
 
     public int indexOf(@NotNull String key){
+        checkIndexes();
         return key2Index.getOrDefault(key, -1);
     }
 
@@ -71,6 +80,7 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
         NeepComponent nc = components.remove(index);
         if(nc.isElement()){
             key2Index.remove(nc.asElement().getKey());
+            needUpdateIndexes = true;
         }
         return nc;
     }
@@ -120,6 +130,7 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
         components.remove(object);
         if(object instanceof NeepElement) {
             key2Index.remove(object.asElement().getKey());
+            needUpdateIndexes = true;
         }
     }
 
@@ -149,7 +160,7 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     @NotNull
     @Override
     public Iterator<NeepComponent> iterator() {
-        return new Itr();
+        return new Itr(this);
     }
 
     @Override
@@ -157,23 +168,28 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
         return getKey() + Mark.SECTION_OPEN + size() + Mark.SECTION_CLOSE;
     }
 
-    public class Itr implements Iterator<NeepComponent> {
+    private static class Itr implements Iterator<NeepComponent> {
         private int cursor = -1;
+        private NeepSection section;
+
+        public Itr(NeepSection section) {
+            this.section = section;
+        }
 
         @Override
         public boolean hasNext() {
-            return cursor + 1 < size();
+            return cursor + 1 < section.size();
         }
 
         @Override
         public NeepComponent next() {
-            return get(++cursor);
+            return section.get(++cursor);
         }
 
         @Override
         public void remove() {
             if(cursor != -1) {
-                NeepSection.this.remove(cursor);
+                section.remove(cursor);
             }
         }
     }
