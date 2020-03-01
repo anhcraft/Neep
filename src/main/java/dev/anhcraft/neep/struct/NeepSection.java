@@ -118,11 +118,32 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
     @NotNull
     @Override
     public Iterator<NeepComponent> iterator() {
-        return components.iterator();
+        return new Itr();
     }
 
     @Override
     public String toString() {
         return getKey() + Mark.SECTION_OPEN + size() + Mark.SECTION_CLOSE;
+    }
+
+    public class Itr implements Iterator<NeepComponent> {
+        private int cursor = -1;
+
+        @Override
+        public boolean hasNext() {
+            return cursor + 1 < size();
+        }
+
+        @Override
+        public NeepComponent next() {
+            return get(++cursor);
+        }
+
+        @Override
+        public void remove() {
+            if(cursor != -1) {
+                NeepSection.this.remove(cursor);
+            }
+        }
     }
 }
