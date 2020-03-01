@@ -18,8 +18,16 @@ public class NeepComment extends NeepComponent {
         return content;
     }
 
+    public void setContent(@NotNull String content) {
+        this.content = content;
+    }
+
     public boolean isInlined() {
         return inlined;
+    }
+
+    public void setInlined(boolean inlined) {
+        this.inlined = inlined;
     }
 
     @Override

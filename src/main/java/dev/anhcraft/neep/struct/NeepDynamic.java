@@ -24,6 +24,13 @@ public abstract class NeepDynamic<V> extends NeepElement {
         return value;
     }
 
+    @Nullable
+    public String setValue(@NotNull String value) {
+        String old = this.value;
+        this.value = value;
+        return old;
+    }
+
     @Override
     public String toString() {
         return getKey() + " " + value.replace("\n", "\\n");

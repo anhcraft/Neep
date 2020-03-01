@@ -21,4 +21,16 @@ public abstract class NeepPrimitive<V> extends NeepDynamic<V> {
     public V getValue() {
         return val;
     }
+
+    @Nullable
+    public String setValue(@NotNull String value) {
+        String old = super.setValue(value);
+        val = super.computeValue();
+        return old;
+    }
+
+    @Nullable
+    public Object setValue(@NotNull Object value) {
+        return setValue(String.valueOf(value));
+    }
 }
