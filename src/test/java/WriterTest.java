@@ -45,4 +45,13 @@ public class WriterTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void test3(){
+        try {
+            print(NeepReader.parse(getClass().getResourceAsStream("/survey.neep")));
+        } catch (IOException | NeepReaderException e) {
+            e.printStackTrace();
+        }
+    }
 }
