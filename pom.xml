@@ -107,4 +107,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <url>https://repo.anhcraft.dev/repository/mvn/</url>
+        </repository>
+    </distributionManagement>
 </project>
