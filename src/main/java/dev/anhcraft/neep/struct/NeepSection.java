@@ -33,7 +33,8 @@ public class NeepSection extends NeepElement implements NeepContainer<NeepCompon
 
     @Nullable
     public NeepComponent get(@NotNull String key){
-        return components.get(key2Index.get(key));
+        int i = indexOf(key);
+        return i == -1 ? null : components.get(i);
     }
 
     @NotNull
