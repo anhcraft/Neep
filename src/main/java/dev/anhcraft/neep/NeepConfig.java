@@ -4,7 +4,6 @@ import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.reader.NeepReader;
 import dev.anhcraft.neep.struct.*;
-import dev.anhcraft.neep.utils.MathUtil;
 import dev.anhcraft.neep.writer.NeepWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,8 +43,7 @@ public class NeepConfig {
         this.root = root;
     }
 
-    @Nullable
-    public NeepComponent get(@NotNull String path) {
+    private NeepComponent get(String path, boolean parent) {
         if(path.isEmpty()) return null;
         String[] keys = path.split("\\.");
         int i = 0;
@@ -54,78 +52,135 @@ public class NeepConfig {
         do {
             if(component instanceof NeepSection) {
                 container = (NeepSection) component;
+            } else if(component != null) {
+                throw new IllegalArgumentException("Invalid path");
+            } else if(i > 0) {
+                return null;
             }
             String key = keys[i++];
             component = container.get(key);
         } while (i < keys.length);
-        return component;
+        return parent ? container : component;
+    }
+
+    @Nullable
+    public NeepComponent getComponent(@NotNull String path) {
+        return get(path, false);
+    }
+
+    @Nullable
+    public NeepSection getParent(@NotNull String path) {
+        return (NeepSection) get(path, true);
+    }
+
+    @Nullable
+    public NeepComponent set(@NotNull String path, @Nullable Object object) {
+        if(path.isEmpty()) return null;
+        String[] keys = path.split("\\.");
+        int i = 0;
+        NeepSection section = root;
+        NeepComponent component = null;
+        do {
+            if(component instanceof NeepSection) {
+                section = (NeepSection) component;
+            } else if(component != null) {
+                throw new IllegalArgumentException("Invalid path");
+            } else if(i > 0) {
+                if(object == null) return null;
+                String k = keys[i - 1];
+                NeepSection ns = new NeepSection(section, k, null , new ArrayList<>());
+                section.add(ns);
+                section = ns;
+            }
+            String key = keys[i++];
+            component = section.get(key);
+        } while (i < keys.length);
+        String key = keys[keys.length - 1];
+        if(object == null) {
+            section.remove(key);
+            return null;
+        } else {
+            int ind = section.indexOf(key);
+            NeepComponent c = NeepComponent.create(section, key, object);
+            if(ind == -1) {
+                section.add(c);
+            } else {
+                section.set(ind, c);
+            }
+            return c;
+        }
+    }
+
+    @Nullable
+    public NeepComponent remove(@NotNull String path) {
+        return set(path, null);
     }
 
     @Nullable
     public String getString(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepDynamic<?> ? ((NeepDynamic<?>) component).stringifyValue() : null;
     }
 
     @NotNull
     public String getString(@NotNull String path, @NotNull String def) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepString ? ((NeepString) component).getValue() : def;
     }
 
     public boolean getBoolean(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepBoolean ? ((NeepBoolean) component).getValue() : false;
     }
 
     public boolean getBoolean(@NotNull String path, boolean def) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepBoolean ? ((NeepBoolean) component).getValue() : def;
     }
 
     public int getInt(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepInt ? ((NeepInt) component).getValue() : 0;
     }
 
     public int getInt(@NotNull String path, int def) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepInt ? ((NeepInt) component).getValue() : def;
     }
 
     public long getLong(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepLong ? ((NeepLong) component).getValue() : 0;
     }
 
     public long getLong(@NotNull String path, long def) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepLong ? ((NeepLong) component).getValue() : def;
     }
 
     public double getDouble(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepDouble ? ((NeepDouble) component).getValue() : 0;
     }
 
     public double getDouble(@NotNull String path, double def) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepDouble ? ((NeepDouble) component).getValue() : def;
     }
 
     public double getExpression(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepExpression ? ((NeepExpression) component).computeValue() : 0;
     }
 
     public double getExpression(@NotNull String path, double def) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepExpression ? ((NeepExpression) component).computeValue() : def;
     }
 
     @Nullable
     public NeepSection getSection(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepSection ? (NeepSection) component : null;
     }
 
@@ -137,7 +192,7 @@ public class NeepConfig {
 
     @Nullable
     public NeepList<?> getList(@NotNull String path) {
-        NeepComponent component = get(path);
+        NeepComponent component = getComponent(path);
         return component instanceof NeepList ? (NeepList<?>) component : null;
     }
 
