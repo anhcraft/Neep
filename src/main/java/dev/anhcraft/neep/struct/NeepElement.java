@@ -4,6 +4,8 @@ import dev.anhcraft.neep.Mark;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class NeepElement extends NeepComponent {
     private String key;
     private NeepComment inlineComment;
@@ -38,5 +40,18 @@ public class NeepElement extends NeepComponent {
     @Override
     public String toString() {
         return key;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NeepElement element = (NeepElement) o;
+        return getPath().equals(element.getPath());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPath());
     }
 }
