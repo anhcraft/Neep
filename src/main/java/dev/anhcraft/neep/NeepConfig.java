@@ -117,6 +117,12 @@ public class NeepConfig {
     }
 
     @Nullable
+    public Object get(@NotNull String path) {
+        NeepComponent component = getComponent(path);
+        return component == null ? null : component.getValueAsObject();
+    }
+
+    @Nullable
     public String getString(@NotNull String path) {
         NeepComponent component = getComponent(path);
         return component instanceof NeepDynamic<?> ? ((NeepDynamic<?>) component).stringifyValue() : null;
