@@ -52,7 +52,11 @@ public class WriteHandler {
                     writeContext.getWriteHandler().write();
                     context.nextLine();
                     context.append(writeContext.buildString());
-                    context.newLine(Mark.LIST_CLOSE).nextLine();
+                    context.newLine(Mark.LIST_CLOSE);
+                    if(list.getInlineComment() != null) {
+                        context.append(" #").append(list.getInlineComment().getContent());
+                    }
+                    context.nextLine();
                 } else {
                     context.report("Unsupported list type");
                 }
@@ -73,7 +77,11 @@ public class WriteHandler {
                     writeContext.getWriteHandler().write();
                     context.nextLine();
                     context.append(writeContext.buildString());
-                    context.newLine(Mark.SECTION_CLOSE).nextLine();
+                    context.newLine(Mark.SECTION_CLOSE);
+                    if(section.getInlineComment() != null) {
+                        context.append(" #").append(section.getInlineComment().getContent());
+                    }
+                    context.nextLine();
                 }
             } else if(component instanceof NeepComment) {
                 if(!((NeepComment) component).isInlined()) {
