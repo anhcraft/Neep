@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class NeepList<T> extends NeepElement implements NeepContainer<T> {
+public class NeepList<T> extends NeepContainer<T> {
     private List<T> backend;
 
     public NeepList(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment, @NotNull List<T> backend) {

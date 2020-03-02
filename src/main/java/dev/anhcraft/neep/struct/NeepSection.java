@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class NeepSection extends NeepElement implements NeepContainer<NeepComponent> {
+public class NeepSection extends NeepContainer<NeepComponent> {
     private Map<String, Integer> key2Index = new HashMap<>();
     private List<NeepComponent> components;
     private boolean needUpdateIndexes = true;

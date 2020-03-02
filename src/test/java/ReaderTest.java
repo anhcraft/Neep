@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 public class ReaderTest {
     private void print(String prefix, Object obj){
-        if(obj instanceof NeepContainer<?> && obj instanceof NeepElement) {
+        if(obj instanceof NeepContainer<?>) {
             String k = ((NeepElement) obj).getKey();
             System.out.println(prefix+obj.getClass().getSimpleName()+": "+k+" ("+((NeepContainer<?>) obj).size()+")");
             ((NeepContainer<?>) obj).forEach((Consumer<Object>) o -> print(prefix + "  ", o));
