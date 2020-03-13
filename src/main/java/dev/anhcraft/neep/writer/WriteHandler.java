@@ -42,7 +42,11 @@ public class WriteHandler {
                     context.newLine(list.getKey()).append(" ").append(Mark.LIST_OPEN);
                 }
                 if(list.size() == 0) {
-                    context.append(Mark.LIST_CLOSE).nextLine();
+                    context.append(" ").append(Mark.LIST_CLOSE);
+                    if(list.getInlineComment() != null) {
+                        context.append(" #").append(list.getInlineComment().getContent());
+                    }
+                    context.nextLine();
                 } else if(list.get(0) instanceof NeepComponent) {
                     @SuppressWarnings("unchecked")
                     WriteContext writeContext = new WriteContext(
@@ -68,7 +72,11 @@ public class WriteHandler {
                     context.newLine(section.getKey()).append(" ").append(Mark.SECTION_OPEN);
                 }
                 if(section.size() == 0) {
-                    context.append(Mark.SECTION_CLOSE).nextLine();
+                    context.append(" ").append(Mark.SECTION_CLOSE);
+                    if(section.getInlineComment() != null) {
+                        context.append(" #").append(section.getInlineComment().getContent());
+                    }
+                    context.nextLine();
                 } else {
                     WriteContext writeContext = new WriteContext(
                             section,
