@@ -140,8 +140,8 @@ public class AutomaticTest {
             String s = config.stringify();
             System.out.println(s);
             System.out.println("---------------------------------------------------");
-            new Action("write", config::stringify, 10000).start().print();
-            new Action("read", () -> NeepConfig.fromString(s), 10000).start().print();
+            new Action("write", config::stringify, 10000).start().report();
+            new Action("read", () -> NeepConfig.fromString(s), 10000).start().report();
             System.out.println("---------------------------------------------------");
             NeepConfig c = NeepConfig.fromString(s);
             for(String k : config.getRoot().getKeys(true)){
