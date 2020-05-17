@@ -5,16 +5,6 @@ public class MathUtil {
         return val < min ? min : Math.min(val, max);
     }
 
-    public static double fastPow(long a, int b){
-        if(a == 0 || a == 1) return a;
-        if(b == 0) return 1;
-        long total = 1;
-        for(int i = 1; i < b; i++){
-            total *= a;
-        }
-        return b < 0 ? 1d / total : total;
-    }
-
     public static boolean isNumber(String num){
         if(num == null || num.isEmpty()) {
             return false;
