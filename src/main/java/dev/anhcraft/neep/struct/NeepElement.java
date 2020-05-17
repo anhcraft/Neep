@@ -1,20 +1,23 @@
 package dev.anhcraft.neep.struct;
 
 import dev.anhcraft.neep.Mark;
-import dev.anhcraft.neep.reader.ReadHandler;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class NeepElement extends NeepComponent {
-    private String key;
+    public static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
+
+    private final String key;
     private NeepComment inlineComment;
 
     public NeepElement(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment) {
         super(parent);
         for (char c : key.toCharArray()) {
-            if (!ReadHandler.KEY_VALIDATOR.test(c)) {
+            if (!KEY_VALIDATOR.test(c)) {
                 throw new IllegalArgumentException("Key contains invalid character(s)");
             }
         }
@@ -30,7 +33,7 @@ public class NeepElement extends NeepComponent {
     @NotNull
     public String getPath() {
         if(getParent() == null) return key;
-        String path = ((NeepElement) getParent()).getPath();
+        String path = getParent().getPath();
         return path.isEmpty() ? key : path + Mark.PATH_SEPARATOR + key;
     }
 

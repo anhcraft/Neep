@@ -2,15 +2,18 @@ package dev.anhcraft.neep.reader;
 
 import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.struct.*;
+import dev.anhcraft.neep.struct.container.NeepContainer;
+import dev.anhcraft.neep.struct.container.NeepList;
+import dev.anhcraft.neep.struct.container.NeepSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class ReadContext {
-    private ReadHandler readHandler;
-    private NeepContainer<?> container; // current container
-    private String string;
+class ReadContext {
+    private final ReadHandler readHandler;
+    private final NeepContainer<?> container; // current container
+    private final String string;
     private NeepComponent lastInlinedEntry;
     private int cursor;
     private Consumer<ReadContext> childCallback;

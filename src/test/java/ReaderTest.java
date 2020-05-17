@@ -1,6 +1,6 @@
 import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.reader.NeepReader;
-import dev.anhcraft.neep.struct.NeepContainer;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import dev.anhcraft.neep.struct.NeepElement;
 import org.junit.Test;
 

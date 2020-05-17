@@ -3,10 +3,14 @@ package dev.anhcraft.neep.writer;
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.struct.*;
 import dev.anhcraft.neep.Mark;
+import dev.anhcraft.neep.struct.container.NeepList;
+import dev.anhcraft.neep.struct.container.NeepSection;
+import dev.anhcraft.neep.struct.dynamic.NeepDynamic;
+import dev.anhcraft.neep.struct.dynamic.NeepExpression;
 
-public class WriteHandler {
+class WriteHandler {
     private static final String SPACE = "  ";
-    private WriteContext context;
+    private final WriteContext context;
 
     public WriteHandler(WriteContext context) {
         this.context = context;

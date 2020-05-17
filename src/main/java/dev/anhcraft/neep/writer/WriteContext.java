@@ -2,15 +2,15 @@ package dev.anhcraft.neep.writer;
 
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.struct.NeepComponent;
-import dev.anhcraft.neep.struct.NeepContainer;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import dev.anhcraft.neep.Mark;
 import org.jetbrains.annotations.NotNull;
 
-public class WriteContext {
-    private StringBuilder stringBuilder = new StringBuilder();
-    private WriteHandler writeHandler;
-    private NeepContainer<NeepComponent> container;
-    private String prefix;
+class WriteContext {
+    private final StringBuilder stringBuilder = new StringBuilder();
+    private final WriteHandler writeHandler;
+    private final NeepContainer<NeepComponent> container;
+    private final String prefix;
 
     public WriteContext(@NotNull NeepContainer<NeepComponent> container, @NotNull String prefix) {
         this.container = container;

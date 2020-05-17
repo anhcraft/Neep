@@ -1,5 +1,7 @@
-package dev.anhcraft.neep.struct;
+package dev.anhcraft.neep.struct.container;
 
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.NeepElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,12 +1,14 @@
-package dev.anhcraft.neep.struct;
+package dev.anhcraft.neep.struct.dynamic;
 
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class NeepExpression extends NeepDynamic<Double> {
-    private Expression expression;
+    private final Expression expression;
 
     public NeepExpression(@Nullable NeepContainer<?> parent, @NotNull String key, @NotNull String value, @Nullable NeepComment inlineComment){
         super(parent, key, value, inlineComment);
@@ -15,7 +17,7 @@ public class NeepExpression extends NeepDynamic<Double> {
 
     @NotNull
     @Override
-    Double handleValue(@NotNull String value) {
+    protected Double handleValue(@NotNull String value) {
         return expression.evaluate();
     }
 

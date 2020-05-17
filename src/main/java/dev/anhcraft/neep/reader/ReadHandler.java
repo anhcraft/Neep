@@ -1,17 +1,20 @@
 package dev.anhcraft.neep.reader;
 
-import dev.anhcraft.neep.errors.NeepReaderException;
-import dev.anhcraft.neep.struct.*;
 import dev.anhcraft.neep.Mark;
+import dev.anhcraft.neep.errors.NeepReaderException;
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.NeepElement;
+import dev.anhcraft.neep.struct.container.NeepList;
+import dev.anhcraft.neep.struct.container.NeepSection;
+import dev.anhcraft.neep.struct.dynamic.NeepDynamic;
+import dev.anhcraft.neep.struct.dynamic.NeepExpression;
+import dev.anhcraft.neep.struct.primitive.*;
 import dev.anhcraft.neep.utils.MathUtil;
 
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
-public class ReadHandler {
-    public static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
-
-    private ReadContext readContext;
+class ReadHandler {
+    private final ReadContext readContext;
     private String key;
     // 0: key
     // 1: mid (key -> value)
@@ -197,7 +200,7 @@ public class ReadHandler {
                 }
             } else if(om){
                 readContext.report("At least one space needed between key and opening mark");
-            } else if(KEY_VALIDATOR.test(c)) {
+            } else if(NeepElement.KEY_VALIDATOR.test(c)) {
                 // having line breaks before key is allowed, but if
                 // the key is being read and there WAS a line break,
                 // this violates the rule; we should put the check

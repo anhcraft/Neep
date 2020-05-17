@@ -1,5 +1,8 @@
-package dev.anhcraft.neep.struct;
+package dev.anhcraft.neep.struct.primitive;
 
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.container.NeepContainer;
+import dev.anhcraft.neep.struct.NeepNumber;
 import dev.anhcraft.neep.utils.MathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +14,7 @@ public class NeepLong extends NeepPrimitive<Long> implements NeepNumber {
 
     @NotNull
     @Override
-    Long handleValue(@NotNull String value) {
+    protected Long handleValue(@NotNull String value) {
         return Long.parseLong(value);
     }
 

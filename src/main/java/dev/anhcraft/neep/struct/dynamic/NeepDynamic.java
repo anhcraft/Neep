@@ -1,5 +1,8 @@
-package dev.anhcraft.neep.struct;
+package dev.anhcraft.neep.struct.dynamic;
 
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.NeepElement;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +15,7 @@ public abstract class NeepDynamic<V> extends NeepElement {
     }
 
     @NotNull
-    abstract V handleValue(@NotNull String value);
+    protected abstract V handleValue(@NotNull String value);
 
     @NotNull
     public V computeValue() {

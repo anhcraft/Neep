@@ -1,7 +1,7 @@
 package dev.anhcraft.neep.writer;
 
 import dev.anhcraft.neep.errors.NeepWriterException;
-import dev.anhcraft.neep.struct.NeepSection;
+import dev.anhcraft.neep.struct.container.NeepSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

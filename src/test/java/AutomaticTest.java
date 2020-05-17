@@ -1,7 +1,9 @@
 import dev.anhcraft.neep.NeepConfig;
-import dev.anhcraft.neep.errors.NeepReaderException;
-import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.struct.*;
+import dev.anhcraft.neep.struct.container.NeepContainer;
+import dev.anhcraft.neep.struct.container.NeepList;
+import dev.anhcraft.neep.struct.container.NeepSection;
+import dev.anhcraft.neep.struct.primitive.NeepPrimitive;
 import org.junit.Test;
 import utils.Action;
 

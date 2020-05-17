@@ -1,14 +1,17 @@
-package dev.anhcraft.neep.struct;
+package dev.anhcraft.neep.struct.container;
 
 import dev.anhcraft.neep.Mark;
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.NeepComponent;
+import dev.anhcraft.neep.struct.NeepElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class NeepSection extends NeepContainer<NeepComponent> {
-    private Map<String, Integer> key2Index = new HashMap<>();
-    private List<NeepComponent> components;
+    private final Map<String, Integer> key2Index = new HashMap<>();
+    private final List<NeepComponent> components;
     private boolean needUpdateIndexes = true;
 
     private void checkIndexes() {

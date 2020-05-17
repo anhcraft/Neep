@@ -4,6 +4,11 @@ import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.reader.NeepReader;
 import dev.anhcraft.neep.struct.*;
+import dev.anhcraft.neep.struct.container.NeepList;
+import dev.anhcraft.neep.struct.container.NeepSection;
+import dev.anhcraft.neep.struct.dynamic.NeepDynamic;
+import dev.anhcraft.neep.struct.dynamic.NeepExpression;
+import dev.anhcraft.neep.struct.primitive.*;
 import dev.anhcraft.neep.writer.NeepWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +20,11 @@ public class NeepConfig {
     @NotNull
     public static NeepConfig create(){
         return new NeepConfig(new NeepSection(null, "", null, new ArrayList<>()));
+    }
+
+    @NotNull
+    public static NeepConfig create(String key){
+        return new NeepConfig(new NeepSection(null, key, null, new ArrayList<>()));
     }
 
     @NotNull
@@ -37,7 +47,7 @@ public class NeepConfig {
         return new NeepConfig(NeepReader.parse(new FileInputStream(file)));
     }
 
-    private NeepSection root;
+    private final NeepSection root;
 
     private NeepConfig(NeepSection root) {
         this.root = root;

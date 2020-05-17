@@ -1,7 +1,7 @@
 package dev.anhcraft.neep.reader;
 
 import dev.anhcraft.neep.errors.NeepReaderException;
-import dev.anhcraft.neep.struct.NeepSection;
+import dev.anhcraft.neep.struct.container.NeepSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -27,7 +27,12 @@ public class NeepReader {
 
     @NotNull
     public static NeepSection parse(@NotNull InputStream stream) throws IOException, NeepReaderException {
-        char[] buffer = new char[BUFFER_SIZE];
+        return parse(stream, BUFFER_SIZE);
+    }
+
+    @NotNull
+    public static NeepSection parse(@NotNull InputStream stream, int bufferSize) throws IOException, NeepReaderException {
+        char[] buffer = new char[bufferSize];
         StringBuilder stringBuilder = new StringBuilder();
         Reader in = new InputStreamReader(stream, StandardCharsets.UTF_8);
         int charsRead;

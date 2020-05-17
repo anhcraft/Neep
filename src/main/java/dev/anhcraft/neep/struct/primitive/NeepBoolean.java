@@ -1,5 +1,7 @@
-package dev.anhcraft.neep.struct;
+package dev.anhcraft.neep.struct.primitive;
 
+import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +12,7 @@ public class NeepBoolean extends NeepPrimitive<Boolean> {
 
     @NotNull
     @Override
-    Boolean handleValue(@NotNull String value) {
+    protected Boolean handleValue(@NotNull String value) {
         return Boolean.parseBoolean(value);
     }
 }
