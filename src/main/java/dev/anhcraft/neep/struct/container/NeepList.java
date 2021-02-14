@@ -27,11 +27,11 @@ public class NeepList<T> extends NeepContainer<T> {
         backend.add(index, object);
     }
 
-    public void appendFirst(@NotNull T object){
+    public void prepend(@NotNull T object){
         backend.add(0, object);
     }
 
-    public void appendLast(@NotNull T object){
+    public void append(@NotNull T object){
         backend.add(object);
     }
 

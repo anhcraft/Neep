@@ -82,10 +82,10 @@ class ReadContext {
             lastInlinedEntry = component;
         }
         if(container instanceof NeepSection) {
-            ((NeepSection) container).appendLast(component);
+            ((NeepSection) container).append(component);
         } else if(container instanceof NeepList){
             //noinspection unchecked,rawtypes
-            ((NeepList) container).appendLast(component);
+            ((NeepList) container).append(component);
         }
     }
 

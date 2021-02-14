@@ -71,11 +71,11 @@ public class NeepSection extends NeepContainer<NeepComponent> {
         components.add(index, component);
     }
 
-    public void appendFirst(@NotNull NeepComponent component){
+    public void prepend(@NotNull NeepComponent component){
         append(0, component);
     }
 
-    public void appendLast(@NotNull NeepComponent component){
+    public void append(@NotNull NeepComponent component){
         append(size(), component);
     }
 
@@ -140,13 +140,13 @@ public class NeepSection extends NeepContainer<NeepComponent> {
 
     @Override
     public void add(@NotNull NeepComponent object) {
-        appendLast(object);
+        append(object);
     }
 
     @Override
     public void addAll(@NotNull Collection<NeepComponent> objects) {
         for (NeepComponent component : objects) {
-            appendLast(component);
+            append(component);
         }
     }
 
@@ -174,7 +174,7 @@ public class NeepSection extends NeepContainer<NeepComponent> {
 
     private static class Itr implements Iterator<NeepComponent> {
         private int cursor = -1;
-        private NeepSection section;
+        private final NeepSection section;
 
         public Itr(NeepSection section) {
             this.section = section;
