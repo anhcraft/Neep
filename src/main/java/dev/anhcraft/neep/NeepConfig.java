@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class NeepConfig {
     @NotNull
@@ -214,6 +215,11 @@ public class NeepConfig {
 
     public int size() {
         return root.size();
+    }
+
+    @NotNull
+    public Set<String> getKeys(boolean deep) {
+        return root.getKeys(deep);
     }
 
     @NotNull
