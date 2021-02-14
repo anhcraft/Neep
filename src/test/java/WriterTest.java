@@ -10,7 +10,7 @@ import java.io.IOException;
 public class WriterTest {
     private void print(NeepSection section) {
         try {
-            System.out.println(NeepWriter.stringify(section));
+            NeepWriter.stringify(section);
         } catch (NeepWriterException e) {
             e.printStackTrace();
         }

@@ -69,7 +69,6 @@ public class AutomaticTest {
                 break;
             }
         }
-        assert object != null;
         NeepElement element = NeepPrimitive.create(container, randomKey(5), object).asElement();
         container.add(element);
         if(RANDOMIZER.nextInt(5) == 0) {
@@ -136,13 +135,9 @@ public class AutomaticTest {
     public void main(){
         NeepConfig config = NeepConfig.of(randomConfig());
         try {
-            System.out.println("---------------------------------------------------");
             String s = config.stringify();
-            System.out.println(s);
-            System.out.println("---------------------------------------------------");
-            new Action("write", config::stringify, 10000).start().report();
-            new Action("read", () -> NeepConfig.fromString(s), 10000).start().report();
-            System.out.println("---------------------------------------------------");
+            new Action("write", config::stringify, 10000).start();
+            new Action("read", () -> NeepConfig.fromString(s), 10000).start();
             NeepConfig c = NeepConfig.fromString(s);
             for(String k : config.getRoot().getKeys(true)){
                 if(!Objects.requireNonNull(config.get(k)).equals(c.get(k))){
