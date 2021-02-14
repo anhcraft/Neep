@@ -2,6 +2,8 @@ import dev.anhcraft.neep.NeepConfig;
 import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.struct.NeepComponent;
+import dev.anhcraft.neep.struct.primitive.NeepBoolean;
+import dev.anhcraft.neep.struct.primitive.NeepString;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,6 +36,9 @@ public class ConfigTest {
             Assert.assertEquals(config.getConfigSection("settings.logging.file").getInt("auto_remove"), 24000);
             Assert.assertArrayEquals(config.getConfigSection("settings.logging.file").getParent().asSection().get("filters").asList().stream().map(NeepComponent::getValueAsObject).toArray(), new String[]{"main","request","response"});
             Assert.assertEquals(config.getConfigSection("routers").size(), 5);
+            Assert.assertTrue(config.contains("settings.logging.file.path"));
+            Assert.assertTrue(config.contains("settings.logging.file.path", NeepString.class));
+            Assert.assertFalse(config.contains("settings.logging.file.path", NeepBoolean.class));
         } catch (IOException | NeepReaderException | NeepWriterException e) {
             e.printStackTrace();
         }

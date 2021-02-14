@@ -80,6 +80,15 @@ public class NeepConfig {
         return get0(path);
     }
 
+    public boolean contains(@NotNull String path) {
+        return getComponent(path) != null;
+    }
+
+    public boolean contains(@NotNull String path, @NotNull Class<? extends NeepComponent> type) {
+        NeepComponent c = getComponent(path);
+        return c != null && type.isAssignableFrom(c.getClass());
+    }
+
     @Nullable
     public NeepContainer<?> getParent() {
         return this.root.getParent();
