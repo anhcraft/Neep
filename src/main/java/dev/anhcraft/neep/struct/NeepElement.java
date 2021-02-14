@@ -16,7 +16,7 @@ public class NeepElement extends NeepComponent {
 
     public NeepElement(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment) {
         super(parent);
-        for (char c : key.toCharArray()) {
+        for (char c : (key = key.trim()).toCharArray()) {
             if (!KEY_VALIDATOR.test(c)) {
                 throw new IllegalArgumentException("Key contains invalid character(s)");
             }
