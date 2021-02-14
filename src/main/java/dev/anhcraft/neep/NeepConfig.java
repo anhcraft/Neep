@@ -122,7 +122,15 @@ public class NeepConfig {
             return null;
         } else {
             int ind = section.indexOf(key);
-            NeepComponent c = NeepComponent.create(section, key, object);
+            NeepComponent c;
+            if(object instanceof NeepConfig) {
+                c = ((NeepConfig) object).root;
+                if(c.asSection().getKey().isEmpty()) {
+                    c.asSection().setKey(key);
+                }
+            } else {
+                c = NeepComponent.create(section, key, object);
+            }
             if(ind == -1) {
                 section.add(c);
             } else {

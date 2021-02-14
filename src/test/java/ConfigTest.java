@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class ConfigTest {
     @Test
@@ -39,6 +40,16 @@ public class ConfigTest {
             Assert.assertTrue(config.contains("settings.logging.file.path"));
             Assert.assertTrue(config.contains("settings.logging.file.path", NeepString.class));
             Assert.assertFalse(config.contains("settings.logging.file.path", NeepBoolean.class));
+            NeepConfig api = NeepConfig.create();
+            api.set("version", 1);
+            api.set("paths", ((Supplier<NeepConfig>) () -> {
+                NeepConfig paths = NeepConfig.create();
+                paths.set("create_post", "posts/create/:id");
+                paths.set("remove_post", "posts/remove/:id");
+                paths.set("get_post", "posts/get/:id");
+                return paths;
+            }).get());
+            config.set("api", api);
         } catch (IOException | NeepReaderException | NeepWriterException e) {
             e.printStackTrace();
         }

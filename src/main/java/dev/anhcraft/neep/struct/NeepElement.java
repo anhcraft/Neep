@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 public class NeepElement extends NeepComponent {
     public static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
 
-    private final String key;
+    private String key;
     private NeepComment inlineComment;
 
     public NeepElement(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment) {
@@ -23,6 +23,12 @@ public class NeepElement extends NeepComponent {
         }
         this.key = key;
         this.inlineComment = inlineComment;
+    }
+
+   @Deprecated
+    public void setKey(@NotNull String key) {
+        if(!this.key.isEmpty()) throw new UnsupportedOperationException();
+        this.key = key;
     }
 
     @NotNull
