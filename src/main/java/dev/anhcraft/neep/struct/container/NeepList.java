@@ -2,6 +2,7 @@ package dev.anhcraft.neep.struct.container;
 
 import dev.anhcraft.neep.Mark;
 import dev.anhcraft.neep.struct.NeepComment;
+import dev.anhcraft.neep.struct.NeepComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +11,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class NeepList<T> extends NeepContainer<T> {
+public class NeepList<T extends NeepComponent> extends NeepContainer<T> {
     private final List<T> backend;
 
     public NeepList(@Nullable NeepContainer<?> parent, @NotNull String key, @Nullable NeepComment inlineComment, @NotNull List<T> backend) {
