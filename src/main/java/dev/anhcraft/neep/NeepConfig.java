@@ -4,6 +4,7 @@ import dev.anhcraft.neep.errors.NeepReaderException;
 import dev.anhcraft.neep.errors.NeepWriterException;
 import dev.anhcraft.neep.reader.NeepReader;
 import dev.anhcraft.neep.struct.*;
+import dev.anhcraft.neep.struct.container.NeepContainer;
 import dev.anhcraft.neep.struct.container.NeepList;
 import dev.anhcraft.neep.struct.container.NeepSection;
 import dev.anhcraft.neep.struct.dynamic.NeepDynamic;
@@ -54,8 +55,8 @@ public class NeepConfig {
         this.root = root;
     }
 
-    private NeepComponent get(String path, boolean parent) {
-        if(path.isEmpty()) return null;
+    private NeepComponent get0(String path) {
+        if(path == null || path.isEmpty()) return null;
         String[] keys = path.split("\\.");
         int i = 0;
         NeepSection container = root;
@@ -71,17 +72,17 @@ public class NeepConfig {
             String key = keys[i++];
             component = container.get(key);
         } while (i < keys.length);
-        return parent ? container : component;
+        return component;
     }
 
     @Nullable
     public NeepComponent getComponent(@NotNull String path) {
-        return get(path, false);
+        return get0(path);
     }
 
     @Nullable
-    public NeepSection getParent(@NotNull String path) {
-        return (NeepSection) get(path, true);
+    public NeepContainer<?> getParent() {
+        return this.root.getParent();
     }
 
     @Nullable
