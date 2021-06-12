@@ -130,6 +130,9 @@ public class NeepConfig {
                 }
             } else {
                 c = NeepComponent.create(section, key, object);
+                if(c instanceof NeepSection && c.asSection().getKey().isEmpty()) {
+                    c.asSection().setKey(key);
+                }
             }
             if(ind == -1) {
                 section.add(c);
