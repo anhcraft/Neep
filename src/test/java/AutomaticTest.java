@@ -139,7 +139,7 @@ public class AutomaticTest {
             new Action("write", config::stringify, 10000).start();
             new Action("read", () -> NeepConfig.fromString(s), 10000).start();
             NeepConfig c = NeepConfig.fromString(s);
-            for(String k : config.getRoot().getKeys(true)){
+            for(String k : config.getRoot().getPaths(true)){
                 if(!Objects.requireNonNull(config.get(k)).equals(c.get(k))){
                     throw new Exception("Equals check failed! Key = " + k);
                 }

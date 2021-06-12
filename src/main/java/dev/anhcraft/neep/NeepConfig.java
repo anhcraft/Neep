@@ -240,7 +240,7 @@ public class NeepConfig {
 
     @NotNull
     public Set<String> getKeys(boolean deep) {
-        return root.getKeys(deep);
+        return root.getPaths(deep);
     }
 
     @NotNull

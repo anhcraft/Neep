@@ -96,26 +96,38 @@ public class NeepSection extends NeepContainer<NeepComponent> {
     }
 
     @NotNull
-    public Set<String> getKeys() {
-        return getKeys(false);
+    public Set<String> getPaths() {
+        return getPaths(false);
     }
 
-    private void getKeys(String prefix, Set<String> keys, boolean deep) {
+    @NotNull
+    public Set<String> getPaths(boolean deep) {
+        Set<String> paths = new LinkedHashSet<>();
+        getPaths(getKey().isEmpty() ? "" : getKey() + ".", paths, deep);
+        return paths;
+    }
+
+    private void getPaths(String prefix, Set<String> keys, boolean deep) {
         for(NeepComponent component : this){
             if(component.isElement()) {
                 keys.add(prefix + component.asElement().getKey());
             }
             if(deep && component.isSection()) {
                 NeepSection section = component.asSection();
-                section.getKeys(prefix + section.getKey() + ".", keys, true);
+                section.getPaths(prefix + section.getKey() + ".", keys, true);
             }
         }
     }
 
     @NotNull
+    public Set<String> getKeys() {
+        return getKeys(false);
+    }
+
+    @NotNull
     public Set<String> getKeys(boolean deep) {
         Set<String> keys = new LinkedHashSet<>();
-        getKeys(getKey().isEmpty() ? "" : getKey() + ".", keys, deep);
+        getPaths("", keys, deep);
         return keys;
     }
 
