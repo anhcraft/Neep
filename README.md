@@ -1,7 +1,7 @@
 # Neep
 Neep is a simple configuration format.
 
-[![Release](https://travis-ci.org/anhcraft/Neep.svg?branch=master)](https://travis-ci.org/anhcraft/Neep)
+[![Release](https://travis-ci.com/anhcraft/Neep.svg?branch=master)](https://travis-ci.com/anhcraft/Neep)
 [![](https://jitpack.io/v/anhcraft/Neep.svg)](https://jitpack.io/#anhcraft/Neep)<br>
 
 ## Data types
