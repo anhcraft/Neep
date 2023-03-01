@@ -8,6 +8,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * Represents an element. A {@code NeepElement} can be either a {@link NeepContainer} or {@code NeepDynamic}.
+ */
 public class NeepElement extends NeepComponent {
     public static final Predicate<Character> KEY_VALIDATOR = c -> Character.isLetterOrDigit(c) || c == '_' || c == '-';
 

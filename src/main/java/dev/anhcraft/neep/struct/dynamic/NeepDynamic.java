@@ -6,6 +6,9 @@ import dev.anhcraft.neep.struct.container.NeepContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a dynamic element.
+ */
 public abstract class NeepDynamic<V> extends NeepElement {
     protected String value;
 

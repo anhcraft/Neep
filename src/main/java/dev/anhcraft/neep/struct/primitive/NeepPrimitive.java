@@ -6,6 +6,9 @@ import dev.anhcraft.neep.struct.dynamic.NeepDynamic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a static, primitive element.
+ */
 public abstract class NeepPrimitive<V> extends NeepDynamic<V> {
     private V val;
 

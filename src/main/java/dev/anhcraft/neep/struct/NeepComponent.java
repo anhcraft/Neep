@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a component. A {@code NeepComponent} can be either a {@link NeepComment} or {@link NeepElement}.
+ */
 public class NeepComponent {
     @NotNull
     public static NeepComponent create(@NotNull NeepContainer<?> container, @NotNull String key, @NotNull Object object) {
