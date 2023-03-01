@@ -110,6 +110,10 @@ class ReadHandler {
     }
 
     public boolean next(char c) throws NeepReaderException {
+        if(c == 13) {
+            return true;
+        }
+
         if(Mark.isCommentIdf(c)) {
             end();
             // collect all characters until meet the line break (or EOS)
